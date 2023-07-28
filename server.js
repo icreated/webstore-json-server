@@ -40,6 +40,9 @@ server.get('/catalog/cart', (req, res) => {
 server.get('/common/countries',(req, res) => {
   res.send(common.countries);
 });
+server.get('/common/shippers',(req, res) => {
+    res.send(common.shippers);
+});
 
 
 server.post('/account', (req, res) => {
@@ -64,7 +67,45 @@ server.get('/account/orders', (req, res) => {
 server.get('/account/orders/:id', (req, res) => {
   checkIfAuthorized(req, res)
   let order = account.orders.find(o => o.id === +req.params.id);
+  order.shipAddress = account.addresses.find(a => a.id === order.shipAddress.id);
+  order.billAddress = account.addresses.find(a => a.id === order.billAddress.id);
+  order.shipper = common.shippers.find(s => s.id === order.shipper.id);
   res.send(order);
+});
+server.post('/account/orders', (req, res) => {
+    checkIfAuthorized(req, res)
+    //find max id
+    let maxId = 0;
+    account.orders.forEach(o => {
+        if (o.id > maxId) {
+            maxId = o.id;
+        }
+    });
+
+    let newOrder = req.body;
+    newOrder.id = maxId + 1;
+    newOrder.date = new Date().getTime();
+    newOrder.docStatus = 'IP';
+    newOrder.docStatusName = 'In Progress';
+    newOrder.documentNo = 'ORD-' + (maxId + 1);
+    newOrder.totalLines = newOrder.grandTotal;
+    account.orders.push(newOrder);
+    // Turn on to limit orders to 6
+    if (account.orders.length > 6) {
+        account.orders
+            .filter(o => o.id !== 1000000)
+            .splice(0, 1);
+    }
+    updateAccount(res);
+    res.send(newOrder);
+});
+server.post('/account/orders/:id/payment', (req, res) => {
+    checkIfAuthorized(req, res)
+    let order = account.orders.find(o => o.id === +req.params.id);
+    order.docStatus = 'CO';
+    order.docStatusName = 'Completed';
+    updateAccount(res);
+    res.status(200).send();
 });
 server.get('/account/addresses', (req, res) => {
     checkIfAuthorized(req, res)
@@ -82,21 +123,30 @@ server.post('/account/addresses', (req, res) => {
     account.addresses.push(newAddress);
     // Turn on to limit addresses to 6
     if (account.addresses.length > 6) {
-        account.addresses.splice(0, 1);
+        account.addresses
+            .filter(a => a.id !== 1000000)
+            .splice(0, 1);
     }
     updateAccount(res);
     res.send(newAddress);
 });
 server.put('/account/addresses/:id', (req, res) => {
     checkIfAuthorized(req, res)
-    let address = account.addresses.find(a => a.id === +req.params.id);
-    address = req.body;
+    if (+req.params.id === 1000000) {
+        res.status(500).send({name: 'Error', message: 'Cannot update default address'});
+        return;
+    }
+    let address = req.body;
     account.addresses.splice(account.addresses.indexOf(address), 1, address);
     updateAccount(res);
     res.status(200).send();
 });
 server.delete('/account/addresses/:id', (req, res) => {
     checkIfAuthorized(req, res)
+    if (+req.params.id === 1000000) {
+        res.status(500).send({name: 'Error', message: 'Cannot delete default address'});
+        return;
+    }
     let address = account.addresses.find(a => a.id === +req.params.id);
     account.addresses.splice(account.addresses.indexOf(address), 1);
     updateAccount(res);
@@ -107,7 +157,7 @@ server.post('/auth/login', (req, res, next) => {
   if (req.body.username === 'user@gardenworld.com' && req.body.password === 'GardenUser') {
     res.send({ token: TOKEN });
   } else {
-    res.status(401).send('Incorrect username or password');
+    res.status(401).send({name: 'Error', message: 'Incorrect username or password'});
   }
 });
 

@@ -1,4 +1,19 @@
 {
+  "shippers": [
+    {
+      "id": 50001,
+      "name": "Fertilizer Internal Shipper"
+    },
+    {
+      "id": 50002,
+      "name": "Furniture Internal Shipper"
+    },
+    {
+      "id": 100,
+      "name": "UPS"
+    }
+  ],
+
   "countries":
   [
     {

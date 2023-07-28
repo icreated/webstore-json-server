@@ -9,7 +9,7 @@
 
   "orders": [
     {
-      "id": 1000031,
+      "id": 1000001,
       "documentNo": "30019",
       "poReference": null,
       "description": null,
@@ -65,7 +65,7 @@
         }
       ],
       "shipAddress": {
-        "id": 116,
+        "id": 1000000,
         "name": "Green House",
         "phone": null,
         "location": {
@@ -81,27 +81,11 @@
         }
       },
       "billAddress": {
-        "id": 116,
-        "name": "Green House",
-        "phone": null,
-        "location": {
-          "id": 124,
-          "address1": "1600 Pennsylvania Ave NW",
-          "address2": "Call Joe Doe",
-          "postal": "DC 20500",
-          "city": "Washington",
-          "country": {
-            "id": 100,
-            "name": "United States"
-          }
-        }
+        "id": 1000000
       },
       "shipper": {
-        "id": 100,
-        "name": "UPS"
+        "id": 100
       },
-      "shipments": [],
-      "invoices": [],
       "taxes": [
         {
           "name": "Standard",
@@ -133,43 +117,14 @@
         }
       ],
       "shipAddress": {
-        "id": 1000000,
-        "name": "Green House",
-        "phone": "06 07 08 09 00",
-        "location": {
-          "id": 1000000,
-          "address1": "1600 Pennsylvania Ave NW",
-          "address2": "Call Joe Doe",
-          "postal": "DC 20600",
-          "city": "Washington",
-          "country": {
-            "id": 100,
-            "name": "United States"
-          }
-        }
+        "id": 1000000
       },
       "billAddress": {
-        "id": 1000000,
-        "name": "Green House",
-        "phone": "06 07 08 09 00",
-        "location": {
-          "id": 1000000,
-          "address1": "1600 Pennsylvania Ave NW",
-          "address2": "Call Joe Doe",
-          "postal": "DC 20600",
-          "city": "Washington",
-          "country": {
-            "id": 100,
-            "name": "United States"
-          }
-        }
+        "id": 1000000
       },
       "shipper": {
-        "id": 100,
-        "name": "UPS"
+        "id": 100
       },
-      "shipments": [],
-      "invoices": [],
       "taxes": [
         {
           "name": "Exempt",
