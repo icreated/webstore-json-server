@@ -32,10 +32,15 @@ server.get('/catalog/products/:categoryId',(req, res) => {
 
 server.get('/catalog/cart', (req, res) => {
   let products = [];
-  req.query.ids.forEach(id => {
-    products.push(catalog.products.find(p => p.id === +id));
-  });
-  res.send(products);
+  if (req.query.ids) {
+      if (typeof req.query.ids === 'string') {
+            req.query.ids = [req.query.ids];
+      }
+      req.query.ids.forEach(id => {
+          products.push(catalog.products.find(p => p.id === +id));
+      });
+      res.send(products);
+  }
 });
 server.get('/common/countries',(req, res) => {
   res.send(common.countries);
