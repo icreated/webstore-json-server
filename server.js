@@ -51,7 +51,7 @@ server.get('/common/shippers',(req, res) => {
 
 
 server.post('/account', (req, res) => {
-    res.send({name: 'Error', message: 'Cannot create account. Only one account is allowed for tests'});
+    res.status(500).send({name: 'Error', message: 'Cannot create account. Only one account is allowed for tests'});
 });
 server.get('/account/info', (req, res) => {
     checkIfAuthorized(req, res)
@@ -75,7 +75,20 @@ server.get('/account/orders/:id', (req, res) => {
   order.shipAddress = account.addresses.find(a => a.id === order.shipAddress.id);
   order.billAddress = account.addresses.find(a => a.id === order.billAddress.id);
   order.shipper = common.shippers.find(s => s.id === order.shipper.id);
+  updateAccount(res);
   res.send(order);
+});
+server.delete('/account/orders/:id', (req, res) => {
+    checkIfAuthorized(req, res);
+    if (+req.params.id === 1000000) {
+        res.status(500).send({name: 'Error', message: 'Cannot delete default order'});
+        return;
+    }
+    let order = account.orders.find(o => o.id === +req.params.id);
+    order.docStatus = 'VO';
+    order.docStatusName = 'Voided';
+    updateAccount(res);
+    res.status(200).send(order);
 });
 server.post('/account/orders', (req, res) => {
     checkIfAuthorized(req, res)
@@ -156,6 +169,10 @@ server.delete('/account/addresses/:id', (req, res) => {
     account.addresses.splice(account.addresses.indexOf(address), 1);
     updateAccount(res);
     res.status(200).send();
+});
+server.get('/account/pdf/orders/:id', (req, res) => {
+    checkIfAuthorized(req, res)
+    res.status(404).send({name: 'Error', message: 'Not implemented'});
 });
 
 server.post('/auth/login', (req, res, next) => {
