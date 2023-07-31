@@ -114,7 +114,6 @@ server.post('/account/orders', (req, res) => {
             .filter(o => o.id !== 1000000)
             .splice(0, 1);
     }
-    updateAccount(res);
     res.send(newOrder);
 });
 server.post('/account/orders/:id/payment', (req, res) => {
@@ -122,7 +121,6 @@ server.post('/account/orders/:id/payment', (req, res) => {
     let order = account.orders.find(o => o.id === +req.params.id);
     order.docStatus = 'CO';
     order.docStatusName = 'Completed';
-    updateAccount(res);
     res.status(200).send();
 });
 server.get('/account/addresses', (req, res) => {
@@ -145,7 +143,6 @@ server.post('/account/addresses', (req, res) => {
             .filter(a => a.id !== 1000000)
             .splice(0, 1);
     }
-    updateAccount(res);
     res.send(newAddress);
 });
 server.put('/account/addresses/:id', (req, res) => {
@@ -167,7 +164,6 @@ server.delete('/account/addresses/:id', (req, res) => {
     }
     let address = account.addresses.find(a => a.id === +req.params.id);
     account.addresses.splice(account.addresses.indexOf(address), 1);
-    updateAccount(res);
     res.status(200).send();
 });
 server.get('/account/pdf/orders/:id', (req, res) => {
