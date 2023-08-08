@@ -189,7 +189,7 @@ server.listen(3000, () => {
 
 function checkIfAuthorized(req, res, next) {
   if (req.headers.authorization !== `Bearer ${TOKEN}`) {
-    res.sendStatus(401).send('Unauthorized');
+    res.status(401).send('Unauthorized');
   }
 }
 
@@ -201,7 +201,7 @@ function update(res, path, object) {
   fs.writeFile(path, JSON.stringify(object), (err) => {
     if (err) {
       console.log(err);
-      res.sendStatus(500).send('Error updating data');
+      res.status(500).send('Error updating data');
     }
   });
 }
