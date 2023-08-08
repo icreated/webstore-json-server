@@ -9,6 +9,11 @@ const TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiR2FyZGVuVXNlciIsIlN1YmplY3QiOiJn
 
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
+server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', '*')
+    next()
+})
 
 server.get('/catalog/categories', (req, res) => {
   res.send(catalog.categories);
