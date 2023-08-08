@@ -1,7 +1,6 @@
 const jsonServer = require('json-server');
 const server = jsonServer.create();
 const middlewares = jsonServer.defaults();
-const cors = require('cors');
 const catalog = require('./data/catalog.json');
 const account = require('./data/account.json');
 const common = require('./data/common.json');
@@ -10,7 +9,6 @@ const TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiR2FyZGVuVXNlciIsIlN1YmplY3QiOiJn
 
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
-server.use(cors());
 
 server.get('/catalog/categories', (req, res) => {
   res.send(catalog.categories);
@@ -42,7 +40,8 @@ server.get('/catalog/cart', (req, res) => {
           products.push(catalog.products.find(p => p.id === +id));
       });
       res.send(products);
-  }
+  } else
+        res.send([]);
 });
 server.get('/common/countries',(req, res) => {
   res.send(common.countries);
