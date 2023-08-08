@@ -77,7 +77,6 @@ server.get('/account/orders/:id', (req, res) => {
   order.shipAddress = account.addresses.find(a => a.id === order.shipAddress.id);
   order.billAddress = account.addresses.find(a => a.id === order.billAddress.id);
   order.shipper = common.shippers.find(s => s.id === order.shipper.id);
-  updateAccount(res);
   res.send(order);
 });
 server.delete('/account/orders/:id', (req, res) => {
