@@ -1,6 +1,7 @@
 const jsonServer = require('json-server');
 const server = jsonServer.create();
 const middlewares = jsonServer.defaults();
+const cors = require('cors');
 const catalog = require('./data/catalog.json');
 const account = require('./data/account.json');
 const common = require('./data/common.json');
@@ -9,11 +10,7 @@ const TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiR2FyZGVuVXNlciIsIlN1YmplY3QiOiJn
 
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
-server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://webstore.icreated.co')
-    res.header('Access-Control-Allow-Headers', '*')
-    next()
-})
+server.use(cors());
 
 server.get('/catalog/categories', (req, res) => {
   res.send(catalog.categories);
